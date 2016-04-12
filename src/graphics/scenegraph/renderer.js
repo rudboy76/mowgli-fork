@@ -23,11 +23,11 @@
  */
 
 
-"use strict"
+'use strict';
 
 /**
  * Core class for rendering in the canvas
- * 
+ *
  * @todo must be a singleton ??
  *
  * @class Renderer
@@ -44,38 +44,40 @@
  * renderer.drawScene();
  */
 function Renderer(canvas_id) {
-  this.scene = null;
+    this.scene = null;
 
-  // Get A WebGL context
-  function createWebGLContext(canvas, opt_attribs) {
-    var names = ["webgl", "experimental-webgl"];
-    var context = null;
-    for (var ii in names) {
-      try {
-        context = canvas.getContext(names[ii], opt_attribs);
-      } catch(e) {}
-      if (context) {
-        break;
-      }
+    // Get A WebGL context
+    function createWebGLContext(canvas, opt_attribs) {
+        var names = ['webgl', 'experimental-webgl'];
+        var context = null;
+        for (var ii in names) {
+            try {
+                context = canvas.getContext(names[ii], opt_attribs);
+            } catch(e) {
+                // TODO
+            }
+            if (context) {
+                break;
+            }
+        }
+        return context;
     }
-    return context;
-  }
 
-  var canvas = document.getElementById(canvas_id);
-  this.context = createWebGLContext(canvas);
+    var canvas = document.getElementById(canvas_id);
+    this.context = createWebGLContext(canvas);
 
-  if (!this.context) {
-    return;
-  }
+    if (!this.context) {
+        return;
+    }
 
-  // Properties
-  this.context.viewportWidth  = canvas.width;
-  this.context.viewportHeight = canvas.height;
-  this.shaders=[];
-  this.shaderProgram=null; //Active program ID
+    // Properties
+    this.context.viewportWidth  = canvas.width;
+    this.context.viewportHeight = canvas.height;
+    this.shaders=[];
+    this.shaderProgram=null; //Active program ID
 
-  // Init GL
-  this._initGL();
+    // Init GL
+    this._initGL();
 }
 
 /**
@@ -85,8 +87,8 @@ function Renderer(canvas_id) {
  *
  **/
 Renderer.prototype.getContext = function () {
-  return this.context;
-}
+    return this.context;
+};
 
 /**
  * Add scene
@@ -95,36 +97,36 @@ Renderer.prototype.getContext = function () {
  *
  **/
 Renderer.prototype.addScene = function (a_scene) {
-  this.scene = a_scene;
-  a_scene.parent = this;
-}
+    this.scene = a_scene;
+    a_scene.parent = this;
+};
 
 
 Renderer.prototype.addShader = function (a_shaderprogram) {
     this.shaders.push(a_shaderprogram);
-}
+};
 
 /**
- * Add sensor 
+ * Add sensor
  *
  * @param {Sensor} - Add a sensor or an object interacting with the scene graph
  *
  **/
 Renderer.prototype.addSensor = function (a_sensor) {
-  this.sensor = a_sensor;
-  this.sensor.setRenderer(this);
-}
+    this.sensor = a_sensor;
+    this.sensor.setRenderer(this);
+};
 
 Renderer.prototype.setUniform = function (name,value) {
     for (var i in this.shaders) {
         var shader = this.shaders[i];
         shader.uniforms[name].value = value;
     }
-}
+};
 
 
 /**
- * Initialize the renderer. 
+ * Initialize the renderer.
  *
  *
  **/
@@ -132,16 +134,16 @@ Renderer.prototype.init = function () {
     var gl = this.context;
     this.scene.init(gl);
   // TODO
-}
+};
 
 /**
- * Draw the scene. This function triggers the OpenGL rendering in an infinite loop. 
+ * Draw the scene. This function triggers the OpenGL rendering in an infinite loop.
  *
  *
  **/
 Renderer.prototype.drawScene = function () {
     var gl = this.context;
-    
+
     // Clear Screen And Depth Buffer
     gl.viewport(0.0, 0.0, gl.viewportWidth, gl.viewportHeight);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -149,7 +151,7 @@ Renderer.prototype.drawScene = function () {
     // Traverse scene graph
     console.log('*************** RENDER ***************');
     this.scene.render(gl);
-}
+};
 /*
  * Private
  */
@@ -157,21 +159,20 @@ Renderer.prototype.drawScene = function () {
 Renderer.FLOAT_IN_BYTES = 4;
 
 Renderer.prototype._initGL = function() {
-  // Init GL stuff
-  var gl = this.context;
-  // TODO
-  // Default clearColor
-  gl.clearColor(0.1,0.1,0.1,1.0);
+    // Init GL stuff
+    var gl = this.context;
+    // TODO
+    // Default clearColor
+    gl.clearColor(0.1,0.1,0.1,1.0);
 
-  gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.DEPTH_TEST);
 
-  // Check extension...
-  gl.getExtension("EXT_frag_depth");
-  if (gl.getSupportedExtensions().indexOf("EXT_frag_depth") < 0 ) {
-    alert('Extension frag_depth not supported');
-  }
+    // Check extension...
+    gl.getExtension('EXT_frag_depth');
+    if (gl.getSupportedExtensions().indexOf('EXT_frag_depth') < 0 ) {
+        alert('Extension frag_depth not supported');
+    }
 
-
-  // Default shader program
-  this.program = new Program();
-}
+    // Default shader program
+    this.program = new Program();
+};

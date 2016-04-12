@@ -23,16 +23,16 @@
  */
 
 
-"use strict"
+"use strict";
 
-/** 
- * @module graphics/gl
- */
+
 
 /**
  * OpenGL node of the scene graph
  *
  * @class NodeGL
+ * 
+ *
  * @constructor
  **/
 function NodeGL(node) {

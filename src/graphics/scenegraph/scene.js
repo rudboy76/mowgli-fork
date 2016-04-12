@@ -4,14 +4,14 @@
  *
  *  This file is part of mowgli
  *
- * This program is free software: you can redistribute it and/or modify it 
- * under the terms of the GNU General Public License as published by 
- * the Free Software Foundation, either version 3 of the License, or 
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
@@ -22,7 +22,7 @@
  * Jean-Christophe Taveau
  */
 
-"use strict"
+'use strict';
 
 
 /**
@@ -33,13 +33,10 @@
  * @constructor
  * @augments Composite
  **/
-var Scene = function () {
+function Scene() {
     Composite.call(this);
-    
+
     this.ID = 'scene';
-    this.add(new Camera() );
-    this.add(new Light()  );
-    
     this.nodeGL = new NodeGL();
 
 }
@@ -47,13 +44,26 @@ var Scene = function () {
 Scene.prototype = Object.create(Composite.prototype);
 
 /**
+ * Set default scene with a camera and a light
+ *
+ **/
+Scene.prototype.setDefault = function() {
+    this.ID = 'scene_default';
+    // Add a camera
+    this.add(new Camera() );
+    // Add a light
+    this.add(new Light()  );
+};
+
+/**
  * Get Camera in the scene
  *
  * @return {Camera} Returns the current camera
  **/
 Scene.prototype.getCamera = function() {
+    // TODO: must be improved if CameraGroup exists for stereo
     return this.children['camera_0'];
-}
+};
 
 Scene.prototype.toString = function() {
     var str = this.ID+'\n';
@@ -61,7 +71,4 @@ Scene.prototype.toString = function() {
         str += '+-'+this.children[i].ID+'\n';
     }
     return str;
-}
-
-
-
+};

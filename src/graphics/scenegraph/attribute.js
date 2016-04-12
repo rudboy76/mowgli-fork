@@ -23,9 +23,9 @@
  */
 
 
-"use strict"
+"use strict";
 
-
+ 
 /**
  * Attribute class used by the shader program
  *

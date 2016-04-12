@@ -4,14 +4,14 @@
  *
  *  This file is part of mowgli
  *
- * This program is free software: you can redistribute it and/or modify it 
- * under the terms of the GNU General Public License as published by 
- * the Free Software Foundation, either version 3 of the License, or 
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
@@ -23,7 +23,7 @@
  */
 
 
-"use strict"
+'use strict';
 
 
 /**
@@ -38,10 +38,10 @@ function Composite(node) {
     this._isDirty = true;
     this.parent   = null;
     this.renderer = null;
-    
-    // 
+
+    //
     this.nodeGL   = null;
-    
+
     // Matrix for rotation(s) and translation(s)
     this.matrix=mat4.create();
     mat4.identity(this.matrix);
@@ -50,7 +50,7 @@ function Composite(node) {
 Composite.prototype.add = function(an_object) {
     this.children[an_object.ID+'_' + size(this.children)] = an_object;
     an_object.parent = this;
-    
+
     function size(obj) {
         var size = 0, key;
         for (key in obj) {
@@ -58,11 +58,11 @@ Composite.prototype.add = function(an_object) {
         }
         return size;
     }
-}
+};
 
 Composite.prototype.getNodeGL = function() {
     return this.nodeGL;
-}
+};
 
 Composite.prototype.getRenderer = function() {
     console.log(this);
@@ -74,11 +74,11 @@ Composite.prototype.getRenderer = function() {
         return this.renderer;
     }
     return this.parent.getRenderer();
-}
+};
 
 Composite.prototype.isDirty = function() {
     return _isDirty;
-}
+};
 
 /**
  * Init the OpenGL config of this object in the scene graph
@@ -95,14 +95,14 @@ Composite.prototype.init = function(context) {
         traverse(context,this.children[i]);
     }
     this.isDirty = false;
-    
+
     function traverse(context,a_node) {
         a_node.init(context);
         for (var i in a_node.children) {
             traverse(context,a_node.children[i]);
         }
     }
-}
+};
 
 /**
  * Render this object and traverse its children
@@ -124,7 +124,7 @@ Composite.prototype.render = function(context) {
     for (var i in this.children) {
         traverse(context,this.children[i]);
     }
-    
+
     function traverse(context,a_node) {
         a_node.render(context);
         for (var i in a_node.children) {
@@ -132,17 +132,17 @@ Composite.prototype.render = function(context) {
         }
     }
 
-}
+};
 
 Composite.prototype.graph = function(level) {
     var lvl = level || 0;
-    var spaces = Array(lvl+1).join(".");
+    var spaces = Array(lvl+1).join('.');
     var str = (this.ID || 'unknown') +'\n';
     for (var i in this.children) {
         str += spaces + '+-'+this.children[i].graph(lvl++)+'\n';
     }
     return str;
-}
+};
 
 /***
 Composite.prototype._updateAttributes = function(context) {
@@ -151,7 +151,7 @@ Composite.prototype._updateAttributes = function(context) {
   if (this.shaderProgram.attributes.length != this.geometry.attributes.length) {
     console.log(this.shaderProgram.attributes);
     console.log(this.shaderProgram.attributes.length + ' != ' + this.geometry.attributesLength() );
-    console.log("MOWGLI: Attributes are not correctly defined");
+    console.log('MOWGLI: Attributes are not correctly defined');
   }
 
     for (var i=0; i < this.geometry.VBO.length;i++) {
